@@ -155,23 +155,14 @@ class Dox {
 			var name = new Path(path).file;
 			Sys.println('Parsing $path');
 
-			var hashPaths = cfg.outputPath + "/hashes/";
-
-			if (!FileSystem.exists(hashPaths))
-				FileSystem.createDirectory(hashPaths);
-
 			var data = sys.io.File.getContent(path);
-			var md5Hash = haxe.crypto.Md5.encode(data);
 
-			if (sys.FileSystem.exists(hashPaths + name + ".md5")) {
-				var previousHash = sys.io.File.getContent(hashPaths + name + ".md5");
-				if (md5Hash == previousHash) {
-					Sys.println('Skipping $path, no file changes detected');
-					return;
-				}
-			}
-
-			sys.io.File.saveContent(hashPaths + name + ".md5", md5Hash);
+			// Note: upstream Dox hashes the XML with haxe.crypto.Md5 and skips
+			// re-parsing unchanged files. On HashLink that primitive lives in the
+			// `fmt` native extension (fmt.hdll), which is an image/audio format
+			// library with heavy native dependencies. quadrants-dox is used for
+			// one-shot site generation, so the incremental-skip optimisation is
+			// dropped here to keep the runtime dependency surface to libhl only.
 
 			var xml = try Xml.parse(data).firstElement() catch (err:Dynamic) {
 				trace('Error while parsing $path');
