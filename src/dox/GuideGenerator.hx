@@ -109,13 +109,25 @@ class GuideGenerator {
 			return;
 		}
 		var nav = sys.io.File.getContent(navPath);
-		var insertion = buildApiLink() + buildGuidesSection(guides);
 		var marker = "var navContent='<ul class=\"nav nav-list\">";
 		if (!nav.contains(marker)) {
 			Sys.println('guides: warning: could not locate navContent opening <ul>; skipping nav injection');
 			return;
 		}
-		nav = nav.replace(marker, marker + insertion);
+		// Insert the API reference link and the Guides expando at the top of the
+		// nav, then wrap the original Dox API type tree in a collapsed "API"
+		// expando so the sidebar top level reads: API reference, Guides, API
+		// (instead of flattening every API package next to the guides).
+		var apiOpen = '<li class="expando package-api"><a class="nav-header" href="#" onclick="return toggleCollapsed(this)"><i class="fa fa-cube"></i>API</a><ul class="nav nav-list">';
+		var apiClose = '</ul></li>';
+		nav = nav.replace(marker, marker + buildApiLink() + buildGuidesSection(guides) + apiOpen);
+		var closeMarker = "</ul>';";
+		if (!nav.contains(closeMarker)) {
+			Sys.println('guides: warning: could not locate navContent closing </ul>; API tree left unwrapped');
+		} else {
+			var idx = nav.lastIndexOf(closeMarker);
+			nav = nav.substr(0, idx) + apiClose + nav.substr(idx);
+		}
 		sys.io.File.saveContent(navPath, nav);
 	}
 

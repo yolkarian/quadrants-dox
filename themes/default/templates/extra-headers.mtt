@@ -1,1 +1,17 @@
 <link href="::api.config.rootPath::qdox.css" rel="stylesheet" />
+<script>
+// Auto-expand the wrapped "API" nav section on every page except the Markdown
+// landing (index.html) so API pages keep their type tree while the landing
+// sidebar stays guide-centric.
+document.addEventListener("DOMContentLoaded", function() {
+	var path = location.pathname.replace(/\/$/, "");
+	var isLanding = path === "" || path === "/" || /(^|\/)index\.html$/.test(path);
+	if (isLanding) return;
+	var api = document.querySelector("#nav .expando.package-api");
+	if (api && !api.classList.contains("expanded")) {
+		api.classList.add("expanded");
+		var i = api.querySelector("i.fa");
+		if (i) { i.classList.remove("fa-folder"); i.classList.add("fa-folder-open"); }
+	}
+});
+</script>
