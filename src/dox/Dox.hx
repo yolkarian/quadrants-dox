@@ -69,6 +69,9 @@ class Dox {
 			@doc("Set the package which serves as top-level")
 			["--toplevel-package"] => function(dotPath:String) cfg.toplevelPackage = dotPath,
 
+			@doc("Path to a directory of Markdown guides to fold into the generated site (e.g. docs/source)")
+			["--guides"] => function(path:String) cfg.guidesPath = path,
+
 			@doc("Disable markdown rendering")
 			["--no-markdown"] => function() cfg.useMarkdown = false,
 

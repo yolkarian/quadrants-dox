@@ -33,6 +33,12 @@ class Config {
 	public var defines:Map<Define, String>;
 	public var pageTitle:Null<String>;
 
+	/**
+		Path to a directory of Markdown guide pages (e.g. docs/source) to fold
+		into the generated site. Null disables guide generation.
+	**/
+	public var guidesPath:Null<String>;
+
 	function set_outputPath(v) {
 		return outputPath = Path.removeTrailingSlashes(v);
 	}
