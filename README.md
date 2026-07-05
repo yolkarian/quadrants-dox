@@ -1,73 +1,65 @@
-# Dox
-[![Build Status](https://github.com/HaxeFoundation/dox/workflows/CI/badge.svg "GitHub Actions")](https://github.com/HaxeFoundation/dox/actions?query=workflow%3ACI)
-[![Haxelib Version](https://badgen.net/haxelib/v/dox)](https://lib.haxe.org/p/dox)
-[![Haxelib Downloads](https://badgen.net/haxelib/d/dox?color=blue)](https://lib.haxe.org/p/dox)
-[![Haxelib License](https://badgen.net/haxelib/license/dox)](LICENSE.md)
+# quadrants-dox
 
+A Quadrants fork of [Dox](https://github.com/HaxeFoundation/dox) (the Haxe documentation generator) that:
 
-A Haxe documentation generator used by many popular projects such as:
+- builds and runs on **HashLink** (`hl run.hl`), and
+- folds the Markdown documentation under `docs/source/` into the generated Haxe API site (landing page, guide pages, unified navigation).
 
-- [Haxe](https://api.haxe.org/)
-- [OpenFL](https://api.openfl.org/)
-- [HaxeFlixel](https://api.haxeflixel.com/)
-- [Heaps](https://heaps.io/api/)
-- [Kha](http://api.kha.tech/)
-- [Ceramic](https://ceramic-engine.com/api-docs/)
+It is the documentation engine used by the [`quadrants-hl`](https://github.com/yolkarian/quadrants-hl) repository to produce a single website containing both the Haxe API reference and the end-user guides, deployed to GitHub Pages.
 
 ![image](resources/screenshot.png)
 
-
 ## Installation
 
-Install the library via [haxelib](https://lib.haxe.org/p/dox):
+This fork drops lix in favour of plain haxelib dependencies. Install the pinned git dependencies and the markdown library with haxelib:
+
 ```sh
-haxelib install dox
+haxelib git hxtemplo https://github.com/Simn/hxtemplo 4b9ec0c07e9ec619c7c414c3a72af4be63d820cc
+haxelib git hxparse   https://github.com/Simn/hxparse 876070ec62a4869de60081f87763e23457a3bda8
+haxelib git hxargs    https://github.com/Simn/hxargs  1d8ec84f641833edd6f0cb2e4290b7524fd27219
+haxelib install markdown
 ```
 
+Then register this fork:
+
+```sh
+haxelib dev quadrants-dox /path/to/quadrants-dox
+# or from a release:
+haxelib git quadrants-dox https://github.com/yolkarian/quadrants-dox.git
+```
+
+## Build
+
+quadrants-dox is built with the system Haxe toolchain (Haxe 4.3.6 + HashLink). There are two build targets:
+
+```sh
+# HashLink (canonical): produces run.hl, run with `hl run.hl`
+haxe runHL.hxml
+
+# Neko (fallback, also what `haxelib run` invokes): produces run.n
+haxe run.hxml
+```
+
+`runBase.hxml` holds the shared compiler flags (`-lib hxtemplo -lib hxparse -lib hxargs -lib markdown -cp src -main dox.Dox`).
 
 ## Usage
 
-> **Note:** Dox requires Haxe 3.1 or higher due to some minor changes in
-abstract rtti xml generation. You'll also need an up-to-date haxelib
-(requires support for `classPath` in _haxelib.json_)
+Generate Haxe XML for the project you want to document, then run quadrants-dox:
 
-1. Compile the code to be included in the documentation using:
-   ```sh
-   haxe -xml docs/doc.xml -D doc-gen [LIBS] <CLASSPATH> <TARGET> <PACKAGE_NAME>
-   ```
-   E.g.
-   ```sh
-   haxe -xml docs/doc.xml -D doc-gen --lib hxargs --classpath src -java bin my.aweseome.package
-   ```
-2. Generate the HTML pages using:
-   ```sh
-   haxelib run dox -i <INPUT_DIR>
-   ```
-   ...where `input_dir` points to the directory containing the generated .xml file(s) of the previous step, i.e.
-   ```sh
-   haxelib run dox -i docs
-   ```
+```sh
+haxe -xml docs/doc.xml -D doc-gen [LIBS] <CLASSPATH> <TARGET> <PACKAGE_NAME>
+hl run.hl -i docs -o pages --title "My API" --toplevel-package mypkg
+```
 
-**:clipboard: For more details, custom theme creation and options [check out the Dox wiki](https://github.com/HaxeFoundation/dox/wiki/)**
-
+To fold in Markdown guides, pass `--guides <dir>` (added by this fork; see `hl run.hl --help`).
 
 ## Local development
 
-To test Dox locally, clone the git repo, run `npm install` in root directory. This installs the correct Haxe version using lix and all required dependencies.
-
-After that you can run:
 ```sh
-npx haxe --run Make dox xml pages server
+haxe runHL.hxml            # build run.hl
+hl run.hl -i test/bin/xml -o bin/pages --include dox
 ```
-This compiles Dox, creates XML's, generates the pages and starts a local dev server at <http://localhost:2000>.
 
+## Upstream
 
-## Local development - testing with nektos/act
-
-The GitHub workflow can be run locally using Nekto's [act](https://github.com/nektos/act) command-line tool. To use it:
-
-1. Install docker
-1. Install [act](https://github.com/nektos/act)
-1. Navigate into the root of your project (where the .github folder is located)
-1. Run the command `act`
-1. On subsequent re-runs you can use `act -r` to reuse previous container which avoids re-installation of components and thus greatly reduces build time.
+This fork tracks upstream Dox via the `upstream` remote. The original Dox README and wiki apply for general usage and custom theme creation.

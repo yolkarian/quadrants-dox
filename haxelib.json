@@ -1,17 +1,17 @@
 {
-	"name": "dox",
-	"url" : "https://github.com/HaxeFoundation/dox",
+	"name": "quadrants-dox",
+	"url" : "https://github.com/yolkarian/quadrants-dox",
 	"license": "MIT",
-	"tags": ["documentation"],
-	"description": "Haxe documentation generator.",
+	"tags": ["documentation", "dox", "quadrants", "hashlink"],
+	"description": "Quadrants fork of Dox that runs on HashLink and folds Markdown guides into the generated Haxe API site.",
 	"version": "1.6.0",
-	"releasenote": "Added a dark mode to the default theme.",
-	"contributors": ["HaxeFoundation", "dpeek", "Simn"],
-		"dependencies": {
-			"hxargs": "git:https://github.com/Simn/hxargs#1d8ec84f641833edd6f0cb2e4290b7524fd27219",
-			"hxtemplo": "git:https://github.com/Simn/hxtemplo#4b9ec0c07e9ec619c7c414c3a72af4be63d820cc",
-			"hxparse": "git:https://github.com/Simn/hxparse#876070ec62a4869de60081f87763e23457a3bda8",
-			"markdown": ""
-	},
+	"releasenote": "Fork Dox 1.6.0: build and run on HashLink, drop lix in favour of plain haxelib dependencies.",
+	"contributors": ["HaxeFoundation", "dpeek", "Simn", "Quadrants developers"],
+	"dependencies": {
+		"hxargs": "git:https://github.com/Simn/hxargs#1d8ec84f641833edd6f0cb2e4290b7524fd27219",
+		"hxtemplo": "git:https://github.com/Simn/hxtemplo#4b9ec0c07e9ec619c7c414c3a72af4be63d820cc",
+		"hxparse": "git:https://github.com/Simn/hxparse#876070ec62a4869de60081f87763e23457a3bda8",
+		"markdown": ""
+},
 	"classPath": "src"
 }

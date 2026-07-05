@@ -8,6 +8,9 @@ function main() {
 			case "dox":
 				Sys.command("npx haxe run.hxml");
 
+			case "hl":
+				Sys.command("haxe runHL.hxml");
+
 			case "xml":
 				Sys.command("npx haxe xml.hxml");
 
