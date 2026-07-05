@@ -198,6 +198,15 @@ class Dox {
 		Sys.println("");
 		Sys.println('Generated ${api.infos.numGeneratedTypes} types in ${api.infos.numGeneratedPackages} packages');
 
+		if (cfg.guidesPath != null) {
+			Sys.println("Collecting Markdown guides");
+			var guides = new GuideCollector(cfg).collect();
+			Sys.println('Generating ${guides.length} guide(s) from ${cfg.guidesPath}');
+			var guideGen = new GuideGenerator(api, writer);
+			var nGuides = guideGen.generate(guides);
+			Sys.println('Generated $nGuides guide page(s)');
+		}
+
 		for (dir in cfg.resourcePaths) {
 			Sys.println('Copying resources from $dir');
 			writer.copyFrom(dir);
