@@ -40,7 +40,20 @@ class Dox {
 			}
 		}
 
-		var cfg = new Config(owd);
+		// Resolve the Dox home (themes/resources) relative to the running script so
+		// Dox can be invoked from any working directory (e.g. `hl /path/run.hl`
+		// from a project's docs/ folder). Falls back to the original CWD if the
+		// program path cannot be determined.
+		var doxHome = owd;
+		var progPath = Sys.programPath();
+		if (progPath != null && progPath.length > 0) {
+			var progDir = haxe.io.Path.directory(progPath);
+			if (progDir != null && progDir.length > 0 && sys.FileSystem.exists(haxe.io.Path.join([progDir, "themes"]))) {
+				doxHome = Path.addTrailingSlash(progDir);
+			}
+		}
+
+		var cfg = new Config(doxHome);
 		var help = false;
 
 		// @formatter:off
