@@ -205,6 +205,7 @@ class Dox {
 			var guideGen = new GuideGenerator(api, writer);
 			var nGuides = guideGen.generate(guides);
 			Sys.println('Generated $nGuides guide page(s)');
+			guideGen.injectNav(guides);
 		}
 
 		for (dir in cfg.resourcePaths) {
