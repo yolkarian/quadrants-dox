@@ -1,0 +1,22 @@
+/* quadrants-dox: guide + landing page styles, layered on top of Dox's theme. */
+.qdox-guide.doc-content, .qdox-landing.doc-content { padding: 0 1rem; line-height: 1.6; }
+.qdox-guide.doc-content h1, .qdox-landing.doc-content h1 { border-bottom: 1px solid #eee; padding-bottom: .3rem; margin-top: .2rem; }
+.qdox-guide.doc-content h2, .qdox-landing.doc-content h2 { border-bottom: 1px solid #eee; padding-bottom: .2rem; margin-top: 1.6rem; }
+.qdox-guide.doc-content h3, .qdox-landing.doc-content h3 { margin-top: 1.3rem; }
+.qdox-guide.doc-content pre, .qdox-landing.doc-content pre { background: #f7f7f7; border: 1px solid #ddd; border-radius: 4px; padding: .8rem; overflow-x: auto; }
+.qdox-guide.doc-content code, .qdox-landing.doc-content code { background: #f7f7f7; padding: 0 .25em; border-radius: 3px; }
+.qdox-guide.doc-content pre code, .qdox-landing.doc-content pre code { background: none; padding: 0; }
+.qdox-guide.doc-content table, .qdox-landing.doc-content table { border-collapse: collapse; margin: 1rem 0; }
+.qdox-guide.doc-content table th, .qdox-landing.doc-content table th,
+.qdox-guide.doc-content table td, .qdox-landing.doc-content table td { border: 1px solid #ddd; padding: .4rem .6rem; }
+.qdox-guide.doc-content blockquote, .qdox-landing.doc-content blockquote { border-left: 4px solid #ddd; margin: 1rem 0; padding: .2rem 1rem; color: #555; }
+.qdox-content a.api-cta {
+	display: inline-block; margin-top: 1rem; padding: .5rem .9rem;
+	background: #2d6a9f; color: #fff !important; border-radius: 4px; text-decoration: none;
+}
+.qdox-content a.api-cta:hover { background: #235a87; }
+.qdox-landing.doc-content { font-size: 1.05rem; }
+.nav .api-ref-link .nav-header { color: #2d6a9f; }
+.dark-theme .qdox-guide.doc-content pre, .dark-theme .qdox-landing.doc-content pre { background: #1e1e1e; border-color: #333; }
+.dark-theme .qdox-guide.doc-content code, .dark-theme .qdox-landing.doc-content code { background: #1e1e1e; }
+.dark-theme .qdox-content a.api-cta { background: #3a86c8; }

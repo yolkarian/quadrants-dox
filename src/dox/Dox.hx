@@ -205,6 +205,9 @@ class Dox {
 			var guideGen = new GuideGenerator(api, writer);
 			var nGuides = guideGen.generate(guides);
 			Sys.println('Generated $nGuides guide page(s)');
+			if (guideGen.generateLanding(guides)) {
+				Sys.println('Generated landing page (Dox toplevel moved to api.html)');
+			}
 			guideGen.injectNav(guides);
 		}
 

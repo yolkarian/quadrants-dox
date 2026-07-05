@@ -22,12 +22,14 @@ class GuideGenerator {
 	final writer:Writer;
 	final markdownHandler:MarkdownHandler;
 	final tplGuide:templo.Template;
+	final tplLanding:templo.Template;
 
 	public function new(api:Api, writer:Writer) {
 		this.api = api;
 		this.writer = writer;
-		this.markdownHandler = new MarkdownHandler(api.config, api.infos);
+	this.markdownHandler = new MarkdownHandler(api.config, api.infos);
 		this.tplGuide = api.config.loadTemplate("guide.mtt");
+		this.tplLanding = api.config.loadTemplate("landing.mtt");
 	}
 
 	public function generate(guides:Array<Guide>):Int {
@@ -44,6 +46,54 @@ class GuideGenerator {
 			n++;
 		}
 		return n;
+	}
+
+	/**
+		Renders the landing `Guide` (relPath == "index") to `<site>/index.html`
+		and moves Dox's generated toplevel package listing to `api.html` so the
+		site root becomes the Markdown landing while the API entry remains one
+		hop away. Returns false if no landing guide was collected (in which case
+		Dox's index.html is left untouched).
+	**/
+	public function generateLanding(guides:Array<Guide>):Bool {
+		var landing = null;
+		for (g in guides) {
+			if (g.isLanding) {
+				landing = g;
+				break;
+			}
+		}
+		if (landing == null) {
+			return false;
+		}
+		var site = api.config.outputPath;
+		var doxIndex = haxe.io.Path.join([site, "index.html"]);
+		var apiPage = haxe.io.Path.join([site, "api.html"]);
+		if (sys.FileSystem.exists(doxIndex)) {
+			sys.io.File.copy(doxIndex, apiPage);
+		}
+		api.config.rootPath = "./";
+		api.currentPageName = api.config.pageTitle != null ? api.config.pageTitle : "Quadrants";
+		var body = injectApiCta(renderGuideBody(landing));
+		var html = tplLanding.execute({api: api, content: body, guide: landing});
+		sys.io.File.saveContent(doxIndex, html);
+		return true;
+	}
+
+	function injectApiCta(html:String):String {
+		if (html.toLowerCase().indexOf('href="api.html"') >= 0) {
+			return html;
+		}
+		var cta = '\n<p><a class="api-cta" href="api.html"><i class="fa fa-cube"></i> API reference</a></p>\n';
+		var idx = html.indexOf("</h1>");
+		if (idx < 0) {
+			idx = html.indexOf("</h2>");
+		}
+		if (idx < 0) {
+			return cta + html;
+		}
+		var end = idx + 5;
+		return html.substr(0, end) + cta + html.substr(end);
 	}
 
 	/**
@@ -70,7 +120,7 @@ class GuideGenerator {
 	}
 
 	function buildApiLink():String {
-		return '<li class="api-ref-link"><a class="nav-header treeLink" href="::rootPath::index.html" title="API reference"><i class="fa fa-cube"></i>API reference</a></li>';
+		return '<li class="api-ref-link"><a class="nav-header treeLink" href="::rootPath::api.html" title="API reference"><i class="fa fa-cube"></i>API reference</a></li>';
 	}
 
 	function buildGuidesSection(guides:Array<Guide>):String {
